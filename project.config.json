@@ -1,0 +1,79 @@
+{
+	"description": "以租代购",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wxa5ca96746458f8cf",
+	"projectname": "carloan-wechat",
+	"miniprogramRoot": "./dist",
+	"libVersion": "1.9.94",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "book",
+					"pathName": "pages/order/book",
+					"query": "item={\"id\":920,\"image\":\"../images/car.png\",\"name\":\"明锐2018款1.6L自动舒适版\",\"firstPay\":9999,\"monthPay\":4146,\"price\":136900}"
+				},
+				{
+					"id": -1,
+					"name": "person",
+					"pathName": "pages/person/index",
+					"query": "item={\"id\":1,\"image\":\"../images/car.png\",\"name\":\"上汽通用别克威朗2018款自动领先版\",\"firstPay\":18000,\"monthPay\":3457}"
+				},
+				{
+					"id": -1,
+					"name": "phone",
+					"pathName": "pages/person/phone",
+					"query": ""
+				},
+				{
+					"id": 3,
+					"name": "证件",
+					"pathName": "pages/order/certificate",
+					"query": "item={\"id\":920,\"image\":\"../images/car.png\",\"name\":\"明锐2018款1.6L自动舒适版\",\"firstPay\":9999,\"monthPay\":4146,\"price\":136900,\"periods\":33,\"finalPay\":126901,\"orderId\":\"2356b7467754425382aaa1b4d71b19fb\"}"
+				},
+				{
+					"id": 4,
+					"name": "支付",
+					"pathName": "pages/order/payment",
+					"query": "item={\"orderId\":\"ycl20180531150645249936\"}"
+				},
+				{
+					"id": -1,
+					"name": "修改手机",
+					"pathName": "pages/person/phone",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "订单列表",
+					"pathName": "pages/order/list",
+					"query": ""
+				}
+			]
+		}
+	}
+}
