@@ -1,0 +1,146 @@
+<style lang="less">
+  .zan-cell{position:relative;padding:12px 15px;display:flex;align-items:center;line-height:1.4;font-size:14px}
+  .zan-cell::after{content:'';position:absolute;top:0;left:0;width:200%;height:200%;transform:scale(.5);transform-origin:0 0;pointer-events:none;box-sizing:border-box;border:0 solid #e5e5e5;border-bottom-width:1px;left:15px;right:0}
+  .zan-cell .zan-cell__icon{margin-right:5px}
+  .zan-cell .zan-cell__icon:empty{display:none}
+  .zan-cell__bd{flex:1}
+  .zan-cell__text{line-height:24px;font-size:14px}
+  .zan-cell__desc{line-height:1.2;font-size:12px;color:#666}
+  .zan-cell__ft{position:relative;text-align:right;color:#666}
+  .zan-cell__no-pading{padding:0}
+  .zan-cell__no-pading .zan-cell__bd_padding{padding:12px 0 12px 15px}
+  .zan-cell__no-pading .zan-cell__bd_padding .zan-form__input{height:26px}
+  .zan-cell__no-pading .zan-cell__ft_padding{padding:12px 15px 12px 0}
+  .zan-cell.last-cell::after{display:none}
+  .zan-cell--access .zan-cell__ft{padding-right:13px}
+  .zan-cell--access .zan-cell__ft::after{position:absolute;top:50%;right:2px;content:" ";display:inline-block;height:6px;width:6px;border-width:2px 2px 0 0;border-color:#c8c8c8;border-style:solid;transform:translateY(-50%) matrix(.71,.71,-.71,.71,0,0)}
+  .zan-cell--switch{padding-top:6px;padding-bottom:6px}
+</style>
+<template>
+  <view
+    @tap="cellTap" class="zan-cell {{ isLastCell ? 'last-cell' : '' }} {{ isLink ? 'zan-cell--access' : '' }}">
+
+    <view class="zan-cell__icon">
+      <slot name="icon"></slot>
+    </view>
+    <view class="zan-cell__bd">
+      <view wx:if="{{ title }}" class="zan-cell__text">{{ title }}</view>
+      <view wx:if="{{ label }}" class="zan-cell__desc">{{ label }}</view>
+      <slot></slot>
+    </view>
+
+    <view @tap.stop="cellFooterTap" class="zan-cell__ft">
+      <block wx:if="{{value}}">{{ value }}</block>
+      <block wx:else>
+        <slot name="footer"></slot>
+      </block>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  const warn = (msg, getValue) => {
+    console.warn(msg)
+    console.log('接受到的值为：', getValue)
+  }
+  export default class ZanCell extends wepy.component {
+    data = {
+      isLastCell: true,
+      num: 10
+    }
+
+    props = {
+      title: {
+        type: String,
+        description: '左侧标题',
+        default: ''
+      },
+      label: {
+        type: String,
+        description: '标题下方的描述信息',
+        default: ''
+      },
+      value: {
+        type: String,
+        description: '右侧内容',
+        default: ''
+      },
+      onlyTapFooter: {
+        type: [Boolean, String],
+        coerce(v) {
+          return typeof v === 'string' ? JSON.parse(v) : v
+        },
+        default: false,
+        description: '只有点击 footer 区域才触发 tab 事件'
+      },
+      isLink: {
+        type: [Boolean, String],
+        coerce(v) {
+          return typeof v === 'string' ? JSON.parse(v) : v
+        },
+        default: false
+      },
+      linkType: {
+        type: String,
+        default: 'navigateTo',
+        description: '链接类型，可选值为 navigateTo，redirectTo，switchTab，reLaunch'
+      },
+      url: {
+        type: String,
+        default: ''
+      }
+    }
+
+    events = {
+
+    }
+
+    methods = {
+      cellFooterTap() {
+        const that = this
+        that.title === undefined && that.repeatFix()
+        that.navigateTo()
+      },
+      cellTap() {
+        const that = this
+        that.title === undefined && that.repeatFix()
+        if (!this.onlyTapFooter) {
+          that.navigateTo()
+        }
+      }
+    }
+
+    repeatFix() {
+      const that = this
+      const cells = that['$parent']['cells']
+      const index = that['$index']
+    //   console.log(index)
+    // console.log(cells[index])
+      that.url = cells[index].url
+      that.isLink = cells[index].isLink
+    }
+
+    navigateTo() {
+      const that = this
+      const url = that.url
+      const type = typeof that.isLink
+      if (!that.isLink || !url || url === 'true' || url === 'false') {
+        return
+      }
+      if (type !== 'boolean' && type !== 'string') {
+        warn('isLink 属性值必须是一个字符串或布尔值', that.isLink)
+        return
+      }
+      if (['navigateTo', 'redirectTo', 'switchTab', 'reLaunch'].indexOf(that.linkType) === -1) {
+        warn('linkType 属性可选值为 navigateTo，redirectTo，switchTab，reLaunch', this.linkType)
+        return
+      }
+      // eslint-disable-next-line
+      wx[this.linkType]({ url })
+    }
+
+    onLoad () {
+
+    }
+  }
+</script>

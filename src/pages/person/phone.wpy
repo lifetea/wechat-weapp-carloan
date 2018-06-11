@@ -1,0 +1,326 @@
+<style lang="less">
+  @import "../../style/weui.wxss";
+  page{
+    background: #f3f4f6;
+  }
+  .body{
+    height: 100%
+  }
+  .form-wrap{
+    min-height: 200rpx;
+  }
+  .cell-wrap{
+    background: white;
+  }
+  .weui-cells{
+    position: static;
+    border-bottom: 1px solid #d9d9d9;
+    padding-left: 24rpx;
+  }
+  .weui-cells{
+    font-size: 14px;
+    line-height: 106rpx;
+  }
+  .weui-cells .weui-input{
+    line-height: 106rpx;
+  }
+
+  .weui-cells .apply-label{
+    font-family: "PingFang SC";
+  }
+
+  .form-wrap .apply-label{
+    width: 140rpx;
+  }
+
+  .placeholder{
+    color: #c8c7cc
+  }
+
+  .btn-wrap{
+    margin-top: 1.4rem;
+  }
+  .verify-wrap{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .verify-input{
+    width: 60%;
+  }
+  .verify-code{
+    vertical-align: center;
+    color: #f36e54;
+    font-size: 14px;
+    text-align: center;
+    width: 40%;
+    height: 50rpx;
+    line-height: 50rpx;
+    border-left: 1px solid #d9d9d9;
+  }
+
+  .btn-wrap button{
+    background: #ff4614;
+    color: white;
+    height: 100rpx;
+    width: 90%;
+    border-radius: 50rpx;
+    font-size: 14px;
+    line-height: 100rpx;
+    font-weight: bold;
+  }
+
+  .disable-verify{
+    color: #cccccc;
+  }
+
+
+</style>
+<template>
+  <view class="body">
+    <view class="form-wrap">
+      <view class="cell-wrap">
+        <view wx:if="{{!!oldMobile}}" class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_select">
+            <view class="weui-cell__hd label-wrap">
+              <view class="apply-label">
+                原手机号
+              </view>
+            </view>
+            <view class="weui-cell__bd weui-cell__bd_in-select-before">
+              <input placeholder-class="placeholder" disabled="disabled" value="{{oldMobile}}"  class="weui-input apply-content" type="number" placeholder="原号码" />
+            </view>
+          </view>
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_select">
+            <view class="weui-cell__hd label-wrap">
+              <view class="apply-label">
+                新手机号
+              </view>
+            </view>
+            <view class="weui-cell__bd weui-cell__bd_in-select-before">
+              <input placeholder-class="placeholder" confirm-type="done" @input="mobileHandler" value="{{mobile}}"  class="weui-input apply-content" type="number" placeholder="输入手机号" />
+            </view>
+          </view>
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_select">
+            <view class="weui-cell__hd label-wrap">
+              <view class="apply-label">
+                验证码
+              </view>
+            </view>
+            <view class="weui-cell__bd weui-cell__bd_in-select-before verify-wrap">
+              <input placeholder-class="placeholder" confirm-type="done" @input="verifyCodeHandler" value="{{verifyCode}}" adjust-position="true"  class="weui-input apply-content verify-input" maxlength="4" type="text" placeholder="短信验证码" />
+              <view @tap="getVerifyCode" class="verify-code {{verifyStatus == true?'disable-verify':''}}">
+                <text>获取验证码</text>
+                <text hidden="{{verifyStatus == true ? false : true}}">({{num}})</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="btn-wrap">
+        <button @tap="saveHandler">确认修改</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Phone extends wepy.page {
+    config = {
+      navigationBarTitleText: '修改手机'
+    }
+    components = {
+    }
+
+    data = {
+      oldMobile: null,
+      verifyStatus: false,
+      mobile: null,
+      verifyCode: '',
+      num: 60
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      mobileHandler: function (event) {
+        this.mobile = event.detail.value
+      },
+      verifyCodeHandler: function (event) {
+        this.verifyCode = event.detail.value
+      },
+      // 获取验证码
+      getVerifyCode (e) {
+        const that = this
+        const mobile = that.mobile
+        if (that.checkMobile(mobile) === false) {
+          return false
+        }
+
+        if (that.verifyStatus === false) {
+          wepy.request({
+            url: 'api/user/verify/send',
+            method: 'POST',
+            data: {
+              mobile: that.mobile
+            },
+            success: function (res) {
+              const resBody = res.data
+              const code = resBody.code
+              const message = resBody.message
+              if (code === 20000) {
+                that.verifyStatus = true
+                that.timer()
+              } else {
+                wx.showToast({
+                  title: message,
+                  icon: 'loading',
+                  duration: 1000
+                })
+              }
+            }
+          })
+        } else {
+
+        }
+      },
+      saveHandler () {
+        const that = this
+        if (that.checkMobile(that.mobile) === false) {
+          return false
+        }
+        if (that.verifyCode.length !== 4) {
+          wx.showToast({
+            title: '请输入正确验证码',
+            icon: 'none',
+            duration: 1000
+          })
+          return false
+        }
+        this.doBindMobile()
+      }
+      // tap () {
+      //   console.log('do noting from ' + this.$name)
+      // },
+      // communicate () {
+      //   console.log(this.$name + ' tap')
+      //
+      //   this.$invoke('counter2', 'minus', 45, 6)
+      //   this.$invoke('counter1', 'plus', 45, 6)
+      //
+      //   this.$broadcast('index-broadcast', 1, 3, 4)
+      // },
+      // counterEmit (...args) {
+      //   let $event = args[args.length - 1]
+      //   console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      // }
+    }
+
+    events = {
+      // 'index-emit': (...args) => {
+      //   let $event = args[args.length - 1]
+      //   console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      // }
+    }
+
+    timer () {
+      const that = this
+      const int = setInterval(function() {
+        if (that.num <= 0) {
+          clearInterval(int)
+          that.num = 60
+          that.verifyStatus = false
+          that.$apply()
+        } else {
+          that.num -= 1
+          that.$apply()
+        }
+      }, 1000)
+    }
+
+    checkMobile (mobile) {
+      if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(mobile)) || mobile.length !== 11) {
+        wx.showToast({
+          title: '请输入正确的手机号',
+          icon: 'none',
+          duration: 1000
+        })
+        return false
+      } else {
+        return true
+      }
+    }
+
+    doBindMobile (callback) {
+      const that = this
+      wepy.request({
+        url: 'api/user/bindmobile',
+        method: 'POST',
+        data: {
+          code: that.verifyCode,
+          mobile: that.mobile
+        },
+        success: function (res) {
+          const resBody = res.data
+          const code = resBody.code
+          const message = resBody.message
+          if (code === 200) {
+            wx.showToast({
+              title: message,
+              icon: 'loading',
+              duration: 2000
+            })
+            that.oldMobile = that.mobile
+            that.mobile = ''
+            that.verifyCode = ''
+            that.verifyStatus = false
+            !!callback && callback()
+          } else {
+            wx.showToast({
+              title: message,
+              icon: 'loading',
+              duration: 1000
+            })
+          }
+        }
+      })
+    }
+
+    async getUserMobile () {
+      const that = this
+      await wepy.request({
+        url: 'api/user/getusermobile',
+        method: 'GET',
+        data: {
+        },
+        success: function (res) {
+          const resBody = res.data
+          const code = resBody.code
+          const phone = resBody.data
+          if (code === 200) {
+            that.oldMobile = phone
+            that.$apply()
+            console.log(that.oldMobile)
+          } else {
+            that.oldMobile = null
+          }
+        }
+      })
+    }
+
+    onLoad() {
+      const that = this
+      that.getUserMobile()
+    }
+  }
+</script>

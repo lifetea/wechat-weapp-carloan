@@ -1,0 +1,6 @@
+module.exports = {
+  text: 'This is from wxs',
+  toFixed: function (num) {
+    return num.toFixed(1);
+  }
+};

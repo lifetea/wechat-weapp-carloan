@@ -1,0 +1,231 @@
+<style lang="less">
+  /* components/verifycode/verifycode.wxss */
+
+  .key-input{
+    position: absolute;
+    z-index: -10;
+    left: -1000rpx;
+    width: 20rpx;
+    height: 20rpx;
+    visibility: hidden;
+  }
+
+  .wx-mask {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .verify-view{
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 5000;
+    padding-top: 1rem;
+    width: 600rpx;
+    height: 600rpx;
+    top: 40%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: white;
+    text-align: center;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .icon{
+    position: fixed;
+    display: block;
+    width: 50rpx;
+    height: 50rpx;
+    left: 10rpx;
+    top: 10rpx;
+    background: red;
+  }
+  .verify-title{
+    display: block;
+    width: 100%;
+    font-family: "PingFang SC";
+    font-weight: bold;
+    margin-top: 1.8rem;
+    font-size: 20px;
+    color: black;
+  }
+  .verify-content{
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    font-size: 14px;
+    color: black;
+  }
+  .verify-code-view{
+    width: 80%;
+    margin: 2rem auto;
+    height: 80rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .verify-input-view{
+    background: aquamarine;
+    height: 80rpx;
+  }
+  .verify-input-view-first{
+    margin-left: 0rpx;
+  }
+  .verify-text{
+    display: block;
+    color: black;
+    width: 60rpx;
+    line-height: 80rpx;
+    height: 80rpx;
+    border: 3rpx #f4f4f4 solid;
+    font-size: 30rpx;
+  }
+</style>
+<template>
+  <view class='wx-verify-bg' hidden="{{!isShow}}">
+    <view class='wx-mask' @touchmove.stop="preventMove"></view>
+    <view class='verify-view' >
+      <!--<image src='{{src}}' mode='aspectFill' class='icon' catchtap='closeView'></image>-->
+      <text class='verify-title'>{{title}}</text>
+      <text class='verify-content'>{{content}}{{phone}}</text>
+      <view class='verify-code-view' @tap='openKeyboard'>
+        <view class="verify-input-view {{index==0?'verify-input-view-first':''}}"
+              wx:for="{{codes}}"
+              wx:for-item="code"
+              wx:key="codeKey">
+          <text class='verify-text'>{{code}}</text>
+        </view>
+      </view>
+      <input class="key-input" value='{{inputValue}}' type='number' maxlength="4" adjust-position="true" confirm-type="done" focus="{{isFocus}}" bindinput="listenKeyInput"/>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class VerifyCode extends wepy.component {
+    data = {
+      isFocus: false,
+      inputValue: '',
+      src: 'image/close.png',
+      phone: '15200000000',
+      codes: ['', '', '', '']
+    }
+
+    props = {
+      // 标题
+      title: {
+        type: String,
+        default: '请输入短线验证码'
+      },
+      content: {
+        type: String,
+        default: '验证码发送至:'
+      },
+      isShow: {
+        type: Boolean,
+        default: false,
+        twoWay: true
+      }
+    }
+
+    watch = {
+      isShow (newValue, oldValue) {
+        const that = this
+        if (newValue === true) {
+          setTimeout(function() {
+            that.isFocus = true
+            that.$apply()
+          }, 100)
+        } else {
+          that.codes = ['', '', '', '']
+          that.inputValue = ''
+          that.isFocus = false
+        }
+        console.log(`isShow value: ${oldValue} -> ${newValue}`)
+      }
+    }
+
+    events = {
+
+    }
+
+    methods = {
+      preventMove(e) {
+        return false
+      },
+      showView({phone, inputSuccess}) {
+        // this.inputSuccess = inputSuccess;
+        // var mPhone = phone.substr(0, 3) + '****' + phone.substr(7)
+        // this.setData({
+        //   isShow: !this.data.isShow,
+        //   phone: mPhone,
+        //   isFocus:true,
+        //   codes: ['', '', '', '', '', '']
+        // })
+      },
+      closeView() {
+        this.isShow = false
+        this.isFocus = false
+        console.log(this.isShow, this.isFocus)
+        // this.setData({
+        //   isShow: !this.data.isShow,
+        //   isFocus: false
+        // })
+      },
+      /**
+       * 点击输入框
+       */
+      openKeyboard: function () {
+        const that = this
+        that.isFocus = false
+        setTimeout(function() {
+          that.isFocus = true
+          that.$apply()
+        }, 100)
+      },
+      /**
+       * 监听键盘输入
+       */
+      listenKeyInput: function (e) {
+        const that = this
+        var text = e.detail.value
+        console.log(e.detail)
+        var textLength = text.length
+        var codeArray = new Array()
+        console.log(text)
+        for (var i = 0; i < (textLength > 4 ? 4 : textLength) ; i++ ){
+          var code = text.substr(i, 1)
+          codeArray[i] = (code)
+        }
+        for (var i = codeArray.length; i < 4; i++) {
+          codeArray.push("")
+        }
+        console.log(codeArray)
+        that.codes = codeArray
+        if (textLength > 4 ) {
+          var returnString = text.substr(0, 4);
+          this.inputSuccess(returnString)
+          this.setData({
+            inputValue: ''
+          })
+        }
+      }
+    }
+
+    onShow () {
+      console.log('2')
+    }
+
+    onLoad () {
+      console.log(this.isShow)
+    }
+  }
+</script>

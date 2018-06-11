@@ -1,0 +1,257 @@
+<style lang="less">
+  page{
+    background: #323233;
+  }
+  .body{
+    height: 100%
+  }
+  .payment-wrap{
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    padding-top: 140rpx;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .qrcode-wrap{
+    padding: 2rem 0;
+    min-height: 200rpx;
+    background: white;
+    border-radius: 10rpx;
+  }
+
+  .payment-title{
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .sub-title{
+    margin: 0 auto;
+    text-align: center;
+    width: 60%;
+    font-size: 12px;
+    color: #d5d5d5;
+    padding: 1rem 0;
+  }
+
+  .img-wrap{
+    margin: 0 auto;
+    width: 80%;
+  }
+  .img-wrap image{
+    width: 100%;
+  }
+
+  .save-file{
+    width: 200rpx;
+    font-size: 14px;
+    height: 60rpx;
+    border-width: 0;
+    border-radius: 30rpx;
+  }
+
+  .btn-wrap{
+    margin-top: 1.6rem;
+  }
+
+  .btn-wrap button{
+    background: #ff4614;
+    color: white;
+    height: 100rpx;
+    width: 100%;
+    border-radius: 50rpx;
+    font-size: 14px;
+    line-height: 100rpx;
+    font-weight: bold;
+  }
+
+</style>
+<template>
+  <view class="body">
+    <view class="payment-wrap">
+      <view class="qrcode-wrap">
+        <view class="payment-title">辣个车订单二维码</view>
+        <view class="sub-title">请向业务员出示二维码以便获得更优质的专属顾问服务</view>
+        <view class="img-wrap">
+          <image src="{{qrCodeBase}}" mode="widthFix"></image>
+        </view>
+        <!--<button class="save-file">保存到图库</button>-->
+      </view>
+      <view class="btn-wrap">
+        <button wx:if="{{isPay == 0}}" @tap="payHandler">支付99元意向金</button>
+        <button wx:else @tap="goListHandler">查看订单</button>
+        <!--<button @tap="orderHandler">查看订单</button>-->
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  // import { connect } from 'wepy-redux'
+
+  // @connect({
+  //   num (state) {
+  //     return state.counter.num
+  //   },
+  //   asyncNum (state) {
+  //     return state.counter.asyncNum
+  //   },
+  //   sumNum (state) {
+  //     return state.counter.num + state.counter.asyncNum
+  //   }
+  // })
+
+  export default class Payment extends wepy.page {
+    config = {
+      navigationBarTitleText: '支付',
+      navigationBarBackgroundColor: '#323233',
+      navigationBarTextStyle: 'white',
+      backgroundColor: 'white',
+      enablePullDownRefresh: false,
+      backgroundTextStyle: 'light',
+      disableScroll: true
+    }
+    components = {
+    }
+
+    data = {
+      isPay: 0,
+      order: {
+        orderId: '33343443'
+      },
+      qrCodeBase: null,
+      accessToken: null
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      goListHandler(){
+        wx.navigateTo({
+          url: './list',
+          success: function(res) {
+            console.log('success')
+            // success
+          },
+          fail: function() {
+            console.log('fail')
+            // fail
+          },
+          complete: function() {
+            console.log('complete')
+            // complete
+          }}
+        )
+      },
+      payHandler () {
+        const that = this
+        wepy.request({
+          url: 'trade/placeAnOrder',
+          method: 'POST',
+          data: {
+            body: '意向金',
+            outTradeNo: that.order.orderId,
+            totalFee: 9900
+          },
+          success: function (res) {
+            const resBody = res.data
+            const option = resBody.data
+            const code = resBody.code
+            if (code === 200) {
+              that.requestPayment(option)
+            } else {
+              that.phone = null
+            }
+          }
+        })
+      }
+    }
+
+    requestPayment(option){
+      const that = this
+      wx.requestPayment(
+        {
+          timeStamp: option.timeStamp,
+          nonceStr: option.nonceStr,
+          package: option.package1,
+          signType: option.signType,
+          paySign: option.paySign,
+          success:function(res){
+            that.isPay = 1
+            that.$apply()
+          },
+          fail:function(res){
+
+          },
+          complete:function(res){
+
+          }
+        })
+    }
+
+    getAccessToken(callback){
+      const that = this
+      wepy.request({
+        url: 'api/wechat/getaccesstoken',
+        method: 'GET',
+        data: {
+        },
+        success: function (res) {
+          const resBody = res.data
+          const code = resBody.code
+          if (code === 200) {
+            that.accessToken = resBody.data
+            !!callback && callback()
+          } else {
+            that.phone = null
+          }
+        }
+      })
+    }
+
+    getQrCode(){
+      const that = this
+      wepy.request({
+        url: 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + that.accessToken,
+        method: 'POST',
+        data: {
+          scene: 'hhhh',
+          page: ''
+        },
+        success: function (res) {
+          const resBody = res.data
+          const code = resBody.code
+          if (code === 200) {
+            that.accessToken = resBody.data
+          } else {
+            that.phone = null
+          }
+        }
+      })
+    }
+
+
+    events = {
+
+    }
+
+    onLoad(options) {
+      const that = this
+      const item = JSON.parse(options.item)
+      that.order.orderId = item.orderId
+      that.isPay = item.isPay
+      const url = 'https://ych.bluetimes.cn/wechat/coLenders?orderid=' + that.order.orderId
+      that.qrCodeBase = 'https://ych.bluetimes.cn/qrcode/generate?url=' + url
+      that.$apply(that.qrCodeBase)
+      console.log(that.qrCodeBase)
+      // that.getAccessToken(function() {
+      //   that.getQrCode()
+      // })
+    }
+  }
+</script>

@@ -1,0 +1,349 @@
+<style lang="less">
+  @import "../style/weui.wxss";
+  page{
+    background: #efefef;
+  }
+  .main{
+    height: 100%
+  }
+  .banner{
+    background: #ff4614;
+  }
+  .banner image{
+    width: 100%;
+  }
+
+  .box{
+    margin: 0 auto;
+    /*padding: 0 10rpx;*/
+    border-radius: 10rpx;
+    background: white;
+    /*min-height: 200rpx;*/
+  }
+
+  .intro-wrap{
+    display: flex;
+    flex-direction: row;
+    min-height: 100rpx;
+    padding: 20rpx 0;
+  }
+  .intro-wrap .intro-item{
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .intro-wrap .intro-t1{
+    font-size: 12px;
+  }
+  .intro-wrap .intro-t2{
+    font-size: 12px;
+    color: #cccccc;
+  }
+  .apply-wrap{
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .apply-title{
+    line-height: 1.6;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    padding: 1rem 0;
+  }
+
+  .label-wrap{
+    width: 80rpx;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+  }
+
+  .apply-label{
+    margin: .5rem auto;
+    width: 40rpx;
+  }
+  .apply-label image{
+    width: 100%;
+  }
+
+  .apply-content{
+    font-size: 14px;
+    height: 100rpx;
+    line-height: 100rpx;
+  }
+
+  .apply-content::-webkit-input-placeholder{
+    color: #ccc;
+  }
+
+  .btn-wrap{
+    margin-top: 1.4rem;
+  }
+
+  .btn-wrap button{
+    background: #ff4614;
+    color: white;
+    height: 100rpx;
+    width: 90%;
+    border-radius: 50rpx;
+    font-size: 14px;
+    line-height: 100rpx;
+    font-weight: bold;
+  }
+
+  .list-wrap{
+    margin-top: 1rem;
+  }
+
+  .list-wrap .list-title{
+    width: 90%;
+    margin: 0 auto;
+    font-family: "PingFang SC";
+    font-weight: bold;
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 16px;
+  }
+  .list-wrap .item-line{
+    padding-bottom: .4rem;
+    background: #efefef;
+  }
+
+  .list-item {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .list-item .img-wrap{
+    width: 90%;
+    margin: 0 auto;
+    height: 400rpx;
+    position: relative;
+  }
+
+  .list-item .tag{
+    position: absolute;
+    width: 60rpx;
+    left: 30rpx;
+    top: 30rpx;
+  }
+  .list-item .tag image{
+    width: 100%;
+  }
+
+  .img-wrap .img{
+    width: 100%;
+  }
+
+  .item-info{
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .item-info .item-name{
+    font-weight: bold;
+    font-family: "PingFang SC";
+    font-size: 14px;
+  }
+  .item-info .first-pay{
+    font-family: "PingFang SC";
+    color: #ff4614;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .item-info .month-pay{
+    font-family: "PingFang SC";
+    font-size: 13px;
+    color: #969696;
+    padding-left: .4rem;
+  }
+
+
+
+</style>
+<template>
+  <view class="main">
+    <view class="banner">
+      <image src="../images/banner.jpeg" mode="widthFix"></image>
+    </view>
+    <!--车型列表-->
+    <view class="list-wrap box">
+      <view class="list-title">最新车型</view>
+      <repeat for="{{carList}}" key="id" index="id" item="item">
+        <view class="list-item" @tap="goDetail({{item}})">
+          <view class="img-wrap">
+            <view class="tag">
+              <image src="../images/new@2x.png" mode="widthFix"/>
+            </view>
+            <image class="img" src="{{item.image}}" mode="widthFix"/>
+          </view>
+          <view class="item-info">
+            <view>
+              <text class="item-name">{{item.name}}</text>
+            </view>
+            <view>
+              <text class="first-pay">首付{{m.toFixed(item.firstPay/10000)}}万</text>
+              <text class="month-pay">月供{{item.monthPay}}元</text>
+            </view>
+          </view>
+        </view>
+        <view class="item-line"></view>
+      </repeat>
+      </view>
+
+    <!--<verify-code :isShow.sync="isShow"></verify-code>-->
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  // import Tab from '../components/tab'
+  // import ZanIcon from '@/components/zan-icon'
+  // import VerifyCode from '@/components/verify-code'
+  import mainwxs from '../wxs/main.wxs'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页',
+      backgroundColor: '#efefef'
+    }
+    components = {
+      // tab: Tab
+      // 'zan-icon': ZanIcon,
+      // 'verify-code': VerifyCode
+    }
+
+    wxs = {
+      m: mainwxs
+    }
+
+    data = {
+      // 显示验证码弹窗
+      isShow: false,
+      mobile: null,
+      // 车型列表
+      carList: wepy.carList,
+      count: 0,
+      netrst: ''
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      phoneHandler: function (event) {
+        this.mobile = event.detail.value
+        // console.log(event)
+      },
+      orderHandler (e) {
+        const that = this
+        console.log(that.mobile)
+        wepy.request({
+          url: 'api/user/verify/send',
+          method: 'POST',
+          data: {
+            mobile: that.mobile
+          },
+          success: function (res) {
+            const code = res.data.code
+            const message = res.data.message
+            if (code === 200) {
+
+            } else {
+              wx.showToast({
+                title: message,
+                icon: 'loading',
+                duration: 1000
+              })
+            }
+            this.isShow = true
+          }
+        })
+        console.log(this.isShow)
+      },
+      goDetail (item) {
+        console.log(item)
+        wx.navigateTo({
+          url: '/pages/order/book?item=' + JSON.stringify(item),
+          success: function(res) {
+            console.log('success')
+            // success
+          },
+          fail: function() {
+            console.log('fail')
+            // fail
+          },
+          complete: function() {
+            console.log('complete')
+            // complete
+          }}
+        )
+      }
+    }
+    // 登录
+    doLogin () {
+      wx.login({
+        success: function (res) {
+          const code = res.code
+          if (code) {
+            wepy.request({
+              url: 'api/user/wxlogin',
+              method: 'POST',
+              data: {
+                code: code
+              },
+              success: function (res) {
+                const resBody = res.data
+                const code = resBody.code
+                const message = resBody.message
+                const token = resBody.data.token
+                if (code === 200) {
+                  wx.setStorageSync('token', token)
+                } else {
+                  wx.showToast({
+                    title: message,
+                    icon: 'loading',
+                    duration: 1000
+                  })
+                }
+              }
+            })
+          } else {
+            console.log('获取用户登录状态失败：' + res.errMsg)
+          }
+        }
+      })
+    }
+
+    events = {
+      // 'index-emit': (...args) => {
+      //   let $event = args[args.length - 1]
+      //   console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      // }
+    }
+
+    onShow () {
+      const that = this
+      that.doLogin()
+      that.$apply()
+    }
+
+    onLoad() {
+      // const that = this
+      // const token = wx.getStorageSync('token')
+      // if (!token) {
+      //   that.doLogin()
+      // }
+      // that.doLogin()
+      // that.$apply()
+    }
+  }
+</script>

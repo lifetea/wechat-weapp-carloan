@@ -1,0 +1,860 @@
+<style lang="less">
+  @import "../../style/weui.wxss";
+  page{
+    background: #efefef;
+  }
+  .main{
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 4rem;
+  }
+  .box{
+    margin: 0 auto;
+    /*padding: 0 10rpx;*/
+    /*border-radius: 10rpx;*/
+    background: white;
+    /*min-height: 200rpx;*/
+  }
+
+  .intro-wrap{
+    display: flex;
+    flex-direction: row;
+    min-height: 100rpx;
+    padding: 20rpx 0;
+  }
+  .intro-wrap .intro-item{
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .intro-wrap .intro-t1{
+    font-size: 12px;
+  }
+  .intro-wrap .intro-t2{
+    font-size: 12px;
+    color: #cccccc;
+  }
+  .shadow-wrap{
+    z-index: 100;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    top: 0;
+    left: 0;
+  }
+
+  .car-gift{
+    margin-top: .6rem;
+    color: #fb8c78;
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .car-gift .gift-img{
+    width: 66rpx;
+  }
+
+  .car-gift .gift-text{
+    padding-left: 10rpx;
+  }
+
+  .gift-img image{
+    width: 100%;
+  }
+
+  .apply-wrap{
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    height: 440rpx;
+  }
+
+  .apply-title{
+    line-height: 1.6;
+    padding-left: 10rpx;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .apply-title .main-title{
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .apply-title .sub-title{
+    font-size: 12px;
+    padding-left: 10rpx;
+    color: #ccc
+  }
+
+  .apply-wrap .label-wrap{
+    width: 120rpx;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .apply-label{
+    margin: .5rem auto;
+    width: 120rpx;
+  }
+  .apply-label image{
+    width: 100%;
+  }
+  .verify-wrap{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .verify-code{
+    vertical-align: center;
+    text-align: center;
+    color: #f36e54;
+    font-size: 14px;
+  }
+
+  .apply-content{
+    font-size: 14px;
+    height: 100rpx;
+    line-height: 100rpx;
+  }
+
+  .apply-content::-webkit-input-placeholder{
+    color: #ccc;
+  }
+
+  .btn-wrap{
+    margin-top: 1.4rem;
+    position: fixed;
+    bottom: 0rpx;
+    width: 100%;
+  }
+
+  .btn-wrap button{
+    background: #ff4614;
+    color: white;
+    height: 100rpx;
+    border-radius: 0;
+    font-size: 14px;
+    line-height: 100rpx;
+    font-weight: bold;
+  }
+
+  .car-wrap .list-title{
+    width: 90%;
+    margin: 0 auto;
+    font-family: "PingFang SC";
+    font-weight: bold;
+    padding-bottom: 0.5rem;
+    font-size: 18px;
+  }
+  .car-wrap .item-line{
+    padding-bottom: .4rem;
+    background: #efefef;
+  }
+
+  .car-item {
+    padding-bottom: 1rem;
+  }
+
+  .car-item .img-wrap{
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .car-item .tag{
+    position: absolute;
+    width: 60rpx;
+    left: 30rpx;
+    top: 30rpx;
+  }
+
+  .car-item .tag image{
+    width: 100%;
+  }
+
+  .img-wrap .img{
+    width: 100%;
+  }
+
+
+  .item-info{
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .item-info .item-name{
+    font-weight: bold;
+    font-family: "PingFang SC";
+    font-size: 14px;
+  }
+  .item-info .first-pay{
+    font-family: "PingFang SC";
+    color: #ff4614;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .item-info .month-pay{
+    font-family: "PingFang SC";
+    font-size: 13px;
+    color: #969696;
+    padding-left: .4rem;
+  }
+  .car-wrap .car-desc{
+    display: flex;
+    flex-direction: row;
+  }
+  .car-desc .car-color{
+    color: #cccccc;
+    font-size: 12px;
+    width: 50%;
+  }
+  .car-desc .car-price{
+    width: 50%;
+    text-align: right;
+    color: #cccccc;
+    font-size: 12px;
+  }
+
+  /*分期费用*/
+
+  .car-fee{
+    margin-top: .6rem;
+
+  }
+
+  .fee-wrap{
+    padding-top: 1rem;
+  }
+
+  .first-year{
+    width: 140rpx;
+    padding-bottom: .4rem;
+  }
+  .first-year .img{
+    width: 100%;
+  }
+
+  .after-year{
+    width: 140rpx;
+    padding-bottom: .4rem;
+  }
+  .after-year .img{
+    width: 100%;
+  }
+
+  .car-col {
+    display: flex;
+    flex-direction: row;
+    background: #f3f3f3;
+    border-radius: 10rpx;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .car-col .col-3{
+    padding-top: .8rem;
+    padding-bottom: .6rem;
+    width: 33.33%;
+
+  }
+  .car-col .col-title{
+    font-size: 12px;
+    font-family: "PingFang SC";
+  }
+
+  .car-col .col-content{
+    padding-top: .2rem;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "PingFang SC";
+    color: #fb8c78;
+  }
+
+  .car-col .col-content text{
+    font-size: 12px;
+    font-family: "PingFang SC";
+    color: #fb8c78;
+  }
+
+  .fee-desc{
+    display: flex;
+    flex-direction: row;
+    padding-top: .2rem;
+  }
+  .fee-desc view{
+    width: 50%;
+  }
+  .fee-desc .fee-notice{
+    font-size: 11px;
+    border: 1px solid #fb8c78;
+    color: #fb8c78;
+    margin-right: .2rem;
+    display: inline-block;
+    border-radius: 20rpx;
+    padding: 0rpx 20rpx;
+  }
+
+  .fee-desc .fee-tip{
+    text-align: right;
+    font-size: 11px;
+    color: #cccccc;
+    display: block;
+    padding-top: .5rem;
+  }
+
+  .after-wrap{
+    padding-left: .4rem;
+    font-size: 12px;
+    padding-bottom: 1rem;
+  }
+
+  .after-desc{
+    color: #fb8c78;
+  }
+
+  .after-desc .large-num{
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .after-notice{
+    color: #8e8e8e;
+  }
+
+  /*提车步骤*/
+
+  .step-wrap{
+    margin: 1rem 0;
+    padding: 1rem 0 0 20rpx;
+  }
+  .step-wrap .step-title{
+    font-size: 16px;
+    font-weight: bold;
+    padding: 20rpx 0;
+  }
+  .step-item{
+    display: flex;
+    flex-direction: row;
+    padding:20rpx 0;
+  }
+  .step-item .item-label{
+    font-size: 13px;
+    width: 144rpx;
+    font-weight: bold;
+  }
+
+  .step-item .item-content{
+    font-size: 12px;
+    color: #707070;
+  }
+
+  .step-item .step-item-title{
+    color: #313131;
+    font-weight: bold;
+  }
+
+  .step-img-wrap{
+    margin: 8rpx auto 0;
+    width: 64rpx;
+  }
+  .step-img-wrap image{
+    width: 100%;
+  }
+
+
+  /*购买须知*/
+
+  .notice-wrap{
+    margin: 1rem 0;
+    padding: 1rem 0 1rem 20rpx;
+  }
+  .notice-wrap .notice-title{
+    font-size: 18px;
+    padding: 20rpx 0;
+  }
+  .notice-item{
+    display: flex;
+    flex-direction: row;
+    padding:20rpx 0;
+  }
+  .notice-item .item-label{
+    font-size: 13px;
+    width: 20%;
+    font-weight: bold;
+  }
+
+  .notice-item .item-content{
+    width: 80%;
+    font-size: 13px;
+    color: #707070;
+  }
+
+  .disable-verify{
+    color: #cccccc;
+  }
+
+</style>
+<template>
+  <view class="main">
+    <!--车型列表-->
+    <view class="car-wrap box">
+      <view class="car-item">
+        <view class="img-wrap">
+          <view class="tag">
+            <image src="../../images/new@2x.png" mode="widthFix"/>
+          </view>
+          <image class="img" src="../{{car.image}}" mode="widthFix"/>
+        </view>
+        <view class="item-info">
+          <view>
+            <text class="item-name">{{car.name}}</text>
+          </view>
+          <view class="car-desc">
+            <view class="car-color">外观珍珠白 + 内饰米咖色</view>
+            <view class="car-price">官方指导价{{car.price/10000}}万</view>
+          </view>
+          <view class="car-gift">
+            <view class="gift-img">
+              <image src="../../images/gift@2x.png" mode="widthFix"></image>
+            </view>
+            <text class="gift-text">支付99元意向金可抵2000元提车服务费</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="car-fee box">
+      <view class="fee-wrap">
+        <view class="first-year">
+          <image class="img" src="../../images/first-year@2x.png" mode="widthFix"></image>
+        </view>
+        <view class="item-info">
+          <view class="car-col">
+            <view class="col-3">
+              <view class="col-title">首付款</view>
+              <view class="col-content">{{car.firstPay}}
+                <text>元</text>
+              </view>
+            </view>
+            <view class="col-3">
+              <view class="col-title">月供</view>
+              <view class="col-content">{{car.monthPay}}
+                <text>元</text>
+              </view>
+            </view>
+            <view class="col-3">
+              <view class="col-title">期数</view>
+              <view class="col-content">{{car.periods}}
+                <text>期</text>
+              </view>
+            </view>
+          </view>
+          <view class="fee-desc">
+            <view>
+              <text class="fee-notice">含购置税</text>
+              <text class="fee-notice">送一年保险</text>
+            </view>
+            <view>
+              <text class="fee-tip">提车服务费2000元</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="fee-wrap">
+        <view class="after-year">
+          <image class="img" src="../../images/after-year@2x.png" mode="widthFix"></image>
+        </view>
+        <view class="after-wrap">
+          <view class="after-desc">
+            <text class="large-num">{{car.finalPay}}</text>
+            <text class="car-price">元尾款可支持({{car.monthPay}}元*{{car.periods}})分期支付</text>
+          </view>
+          <view>
+            <text class="after-notice">还可以选择过户到您名下或者直接还车</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="step-wrap box">
+      <view class="step-title">提车步骤</view>
+      <view class="step-list">
+        <view class="step-item">
+          <view class="item-label">
+            <view class="step-img-wrap">
+              <image src="../../images/order-icon@2x.png" mode="widthFix"></image>
+            </view>
+          </view>
+          <view class="item-content">
+            <view class="step-item-title">在线预约</view>
+            <view class="step-item-content">选择意向车型提交真实联系方式和简单资料</view>
+          </view>
+        </view>
+        <view class="step-item">
+          <view class="item-label">
+            <view class="step-img-wrap">
+              <image src="../../images/assess-icon@2x.png" mode="widthFix"></image>
+            </view>
+          </view>
+          <view class="item-content">
+            <view class="step-item-title">资信评估</view>
+            <view class="step-item-content">安排服务顾问为您服务并对您的资料进行审核</view>
+          </view>
+        </view>
+        <view class="step-item">
+          <view class="item-label">
+            <view class="step-img-wrap">
+              <image src="../../images/tax-icon@2x.png" mode="widthFix"></image>
+            </view>
+          </view>
+          <view class="item-content">
+            <view class="step-item-title">确认购车方案</view>
+            <view class="step-item-content">服务顾问与您确定金额方案，支付相关款项</view>
+          </view>
+        </view>
+        <view class="step-item">
+          <view class="item-label">
+            <view class="step-img-wrap">
+              <image src="../../images/car-icon@2x.png" mode="widthFix"></image>
+            </view>
+          </view>
+          <view class="item-content">
+            <view class="step-item-title">等待提车</view>
+            <view class="step-item-content">收到提车通知后即可到店提车</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="notice-wrap box">
+      <view class="notice-title">购买须知</view>
+      <view class="notice-list">
+        <view class="notice-item">
+          <view class="item-label">必备资料</view>
+          <view class="item-content">需要提供有效身份证证件、驾驶证以及银行卡</view>
+        </view>
+        <view class="notice-item">
+          <view class="item-label">车辆归属</view>
+          <view class="item-content">租赁期内车辆归属辣个车，过户后转移所有权</view>
+        </view>
+        <view class="notice-item">
+          <view class="item-label">购置税</view>
+          <view class="item-content">含购置税，您无需支付额外费用</view>
+        </view>
+        <view class="notice-item">
+          <view class="item-label">牌照手续</view>
+          <view class="item-content">上牌手续由辣个车办理</view>
+        </view>
+      </view>
+    </view>
+    <view class="btn-wrap">
+      <button @tap="applyOrderHandler">立即预约</button>
+    </view>
+    <view class="shadow-wrap" wx:if="{{isShow}}" @tap.stop="hideModal">
+    </view>
+    <view class="apply-wrap box" wx:if="{{isShow}}">
+      <view class="apply-title">
+        <text class="main-title">在线预约</text>
+        <text class="sub-title">便捷预约极速审核</text>
+      </view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd label-wrap">
+            <view class="apply-label">
+              手机号
+            </view>
+          </view>
+          <view class="weui-cell__bd weui-cell__bd_in-select-before">
+            <input @input="phoneHandler" value="{{mobile}}"  class="weui-input apply-content" type="text" placeholder="手机号码" />
+          </view>
+        </view>
+      </view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd label-wrap">
+            <view class="apply-label">
+              验证码
+            </view>
+          </view>
+          <view class="weui-cell__bd weui-cell__bd_in-select-before verify-wrap">
+            <input @input="verifyCodeHandler" confirm-type="done" style="width:65%" value="{{verifyCode}}"  class="weui-input apply-content" type="number" maxlength="4" placeholder="短信验证码" />
+            <view  @tap="getVerifyCode" class="verify-code {{verifyStatus == true?'disable-verify':''}}">
+              <text>获取验证码</text>
+              <text hidden="{{verifyStatus == true ? false : true}}">({{num}})</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="btn-wrap">
+        <button @tap="nextStepHandler">下一步</button>
+      </view>
+    </view>
+
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  // import { connect } from 'wepy-redux'
+
+  // @connect({
+  //   num (state) {
+  //     return state.counter.num
+  //   },
+  //   asyncNum (state) {
+  //     return state.counter.asyncNum
+  //   },
+  //   sumNum (state) {
+  //     return state.counter.num + state.counter.asyncNum
+  //   }
+  // })
+
+  export default class Book extends wepy.page {
+    config = {
+      navigationBarTitleText: '预约',
+      backgroundColor: '#efefef',
+      enablePullDownRefresh: false
+    }
+    components = {
+    }
+
+    data = {
+      // 显示验证码弹窗
+      isShow: false,
+      verifyStatus: false,
+      verifyCode: '',
+      mobile: null,
+      userMobile: null,
+      orderId: null,
+      currentTab: 0,
+      carPick: [0, 0, 0],
+      car: {
+        image: '../images/golf.png'
+      },
+      userInfo: {
+        nickName: '加载中...'
+      },
+      normalTitle: '原始标题',
+      setTimeoutTitle: '标题三秒后会被修改',
+      count: 0,
+      num: 60
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      hideModal (e) {
+        this.isShow = false
+      },
+      applyOrderHandler (e) {
+        const that = this
+        // eslint-disable-next-line
+        if (!!that.userMobile) {
+          that.goCertificate()
+        } else {
+          that.isShow = true
+        }
+      },
+      phoneHandler: function (event) {
+        this.mobile = event.detail.value
+      },
+      verifyCodeHandler: function (event) {
+        this.verifyCode = event.detail.value
+      },
+      // 获取验证码
+      getVerifyCode (e) {
+        const that = this
+        const mobile = that.mobile
+        if (that.checkMobile(mobile) === false) {
+          return false
+        }
+        if (that.verifyStatus === false) {
+          wepy.request({
+            url: 'api/user/verify/send',
+            method: 'POST',
+            data: {
+              mobile: that.mobile
+            },
+            success: function (res) {
+              const resBody = res.data
+              const code = resBody.code
+              const message = resBody.message
+              if (code === 20000) {
+                that.verifyStatus = true
+                that.timer()
+              } else {
+                wx.showToast({
+                  title: message,
+                  icon: 'loading',
+                  duration: 1000
+                })
+              }
+            }
+          })
+        } else {
+
+        }
+
+        console.log(this.isShow)
+      },
+      nextStepHandler (e) {
+        const that = this
+        if (that.checkMobile(that.mobile) === false) {
+          return false
+        }
+
+        if (that.verifyCode.length !== 4) {
+          wx.showToast({
+            title: '请输入正确验证码',
+            icon: 'none',
+            duration: 1000
+          })
+          return false
+        }
+
+        that.doSubscribe(function() {
+          that.goCertificate()
+        })
+      }
+    }
+    // 绑定手机获取订单号
+    doSubscribe (callback) {
+      const that = this
+      console.log(that.mobile)
+      wepy.request({
+        url: 'api/car/subscribe',
+        method: 'POST',
+        data: {
+          mobile: that.mobile,
+          code: that.verifyCode,
+          carid: that.car.id
+        },
+        success: function (res) {
+          const resBody = res.data
+          const code = resBody.code
+          const message = resBody.msg
+          if (code === 200) {
+            that.isShow = false
+            that.userMobile = that.mobile
+            !!callback && callback()
+          } else {
+            wx.showToast({
+              title: message,
+              icon: 'loading',
+              duration: 1000
+            })
+          }
+        }
+      })
+    }
+
+    async getUserMobile () {
+      const that = this
+      await wepy.request({
+        url: 'api/user/getusermobile',
+        method: 'GET',
+        data: {
+        },
+        success: function (res) {
+          const resBody = res.data
+          const phone = resBody.data
+          const code = resBody.code
+          console.log('获取手机')
+          if (code === 200) {
+            that.userMobile = phone
+          } else {
+            that.userMobile = null
+          }
+          that.$apply()
+          console.log('手机号', that.userMobile)
+        }
+      })
+    }
+
+    timer () {
+      const that = this
+      const int = setInterval(function() {
+        if (that.num <= 0) {
+          clearInterval(int)
+          that.num = 60
+          that.verifyStatus = false
+          that.$apply()
+        } else {
+          that.num -= 1
+          that.$apply()
+        }
+      }, 1000)
+    }
+
+    goCertificate () {
+      const that = this
+      const item = that.car
+      item['orderId'] = that.orderId
+      console.log(item, JSON.stringify(item))
+      wx.navigateTo({
+        url: './certificate?item=' + JSON.stringify(item),
+        success: function(res) {
+          console.log('success')
+          // success
+        },
+        fail: function() {
+          console.log('fail')
+          // fail
+        },
+        complete: function() {
+          console.log('complete')
+          // complete
+        }}
+      )
+    }
+
+    checkMobile (mobile) {
+      if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(mobile))) {
+        wx.showToast({
+          title: '请输入正确手机号',
+          icon: 'none',
+          duration: 1000
+        })
+        return false
+      } else {
+        return true
+      }
+    }
+
+    events = {
+      // 'index-emit': (...args) => {
+      //   let $event = args[args.length - 1]
+      //   console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      // }
+    }
+
+    onLoad(options) {
+      const that = this
+      that.getUserMobile()
+      that.car = JSON.parse(options.item)
+      that.car.finalPay = parseInt(that.car.price - that.car.firstPay)
+      that.car.periods = parseInt(that.car.finalPay / that.car.monthPay)
+
+      that.$apply()
+    }
+  }
+</script>

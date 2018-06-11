@@ -1,0 +1,32 @@
+<style lang="less">
+
+
+</style>
+
+<template>
+  <view>
+    {{title}}
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Test extends wepy.component {
+    props = {
+      title: {
+        type: String,
+        default: 'null'
+      }
+    }
+    data = {
+    }
+
+    methods = {
+    }
+
+    onLoad () {
+    }
+  }
+</script>

@@ -1,0 +1,112 @@
+<style lang="less">
+  .zan-toptips {
+    display: block;
+    position: fixed;
+    -webkit-transform: translateZ(0) translateY(-100%);
+    width: 100%;
+    min-height: 32px;
+    top: 0;
+    line-height: 2.3;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+    background-color: #e64340;
+    z-index: 110;
+    opacity: 0;
+    transition: all .4s ease
+  }
+
+  .zan-toptips--show {
+    -webkit-transform: translateZ(0) translateY(0);
+    opacity: 1
+  }
+
+</style>
+<template>
+  <view class="zan-toptips {{ isShow ? 'zan-toptips--show' : '' }}">{{ content }}</view>
+</template>
+<script>
+  import wepy from 'wepy'
+  const FONT_COLOR = '#fff'
+  const BG_COLOR = '#e64340'
+  export default class ZanBtn extends wepy.component {
+    data = {
+      inGroup: false,
+      isLast: false
+    }
+    props = {
+      content: String,
+      color: {
+        type: String,
+        value: FONT_COLOR
+      },
+      backgroundColor: {
+        type: String,
+        value: BG_COLOR
+      },
+      isShow: {
+        type: Boolean,
+        value: false
+      },
+      duration: {
+        type: Number,
+        value: 3000
+      }
+    }
+
+    events = {
+
+    }
+
+    methods = {
+      show() {
+        const { duration } = this.data
+
+        this._timer && clearTimeout(this._timer)
+        this.setData({
+          isShow: true
+        })
+
+        if (duration > 0 && duration !== Infinity) {
+          this._timer = setTimeout(() => {
+            this.hide()
+          }, duration)
+        }
+      },
+
+      hide() {
+        this._timer = clearTimeout(this._timer)
+
+        this.setData({
+          isShow: false
+        })
+      }
+    }
+
+    Toptips(options = {}) {
+      const pages = getCurrentPages()
+      const ctx = pages[pages.length - 1]
+      const defaultOptions = {
+        selector: '#zan-toptips',
+        duration: 3000
+      }
+
+      options = Object.assign(defaultOptions, parseParam(options))
+
+      const $toptips = ctx.selectComponent(options.selector)
+      delete options.selector
+
+      $toptips.setData({
+        ...options
+      })
+      $toptips && $toptips.show()
+    }
+
+    parseParam(params) {
+      return typeof params === 'object' ? params : { content: params }
+    }
+
+    onLoad () {
+    }
+  }
+</script>

@@ -1,0 +1,306 @@
+<style lang="less">
+  page{
+    height: 100%;
+    background: #f1f2f4;
+  }
+  .body{
+    height: 100%
+  }
+  .user-wrap{
+    background: white;
+    height: 240rpx;
+    padding-top: 40rpx;
+    color: black;
+  }
+
+  .logo-wrap{
+    width:140rpx;
+    height:140rpx;
+    box-shadow:0px 0px 10px #ffffff;
+    border-radius: 50%;
+    z-index: 2;
+    overflow: hidden;
+    animation: sway 10s ease-in-out infinite;
+    opacity: .95;
+  }
+
+  .userinfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 2rem;
+  }
+
+  .userinfo-avatar {
+    width: 140rpx;
+    height: 140rpx;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px #fa0000;
+  }
+
+  .userinfo-nickname {
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+    color: black;
+    font-family: "PingFang SC";
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .panel-wrap{
+    width: 100%;
+    margin: .8rem auto 0;
+    min-height: 200rpx;
+  }
+  .panel-wrap .cell-panel{
+    margin-top: 2rpx;
+  }
+  .panel-wrap .cell-panel .zan-cell {
+    padding:18px 18px;
+    display:flex;
+    align-items:center;
+    line-height:1.8;
+    font-size:18px;
+    font-family: "PingFang SC";
+  }
+
+  .btn-wrap{
+    width: 90%;
+    margin: 60rpx auto 60rpx;
+  }
+
+  .cell-panel{
+    display: block;
+    margin-top: 10rpx;
+  }
+  .zan-cell-icon-wrap{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .zan-cell-icon{
+    display: inline-block;
+    height: 42rpx;
+    width: 42rpx;
+    max-width: 100%;
+  }
+
+</style>
+<template>
+  <view class="body">
+    <view class="user-wrap">
+      <view class="userinfo" @tap="handleViewTap">
+        <view class="logo-wrap">
+          <open-data class="logo"  type="userAvatarUrl"></open-data>
+        </view>
+        <view class="userinfo-nickname">
+          <open-data  type="userNickName"></open-data>
+        </view>
+      </view>
+    </view>
+
+    <view class="panel-wrap">
+      <repeat for="{{cells}}" key="index" index="index" item="item">
+        <zan-panel class="cell-panel">
+          <view slot="content">
+            <zan-cell :title="item.title" :url="item.url" :isLink="item.isLink">
+              <view class="zan-cell-icon-wrap" wx:if="{{item.icon}}" slot="icon">
+                <zan-icon wx:if="{{item.isIcon}}" :type="item.icon"></zan-icon>
+                <image wx:else class="zan-cell-icon" src="{{item.icon}}"/>
+              </view>
+            </zan-cell>
+          </view>
+        </zan-panel>
+      </repeat>
+    </view>
+    <!--<view  class="btn-wrap">-->
+      <!--<zan-btn :fn="logout" type="danger">-->
+        <!--<view slot="content">-->
+          <!--退出登录-->
+        <!--</view>-->
+      <!--</zan-btn>-->
+    <!--</view>-->
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import ZanCell from '@/components/zan-cell'
+  import ZanPanel from '@/components/zan-panel'
+  import ZanIcon from '@/components/zan-icon'
+  import ZanBtn from '@/components/zan-btn'
+  // import { connect } from 'wepy-redux'
+  // @connect({
+  //   num (state) {
+  //     return state.counter.num
+  //   },
+  //   asyncNum (state) {
+  //     return state.counter.asyncNum
+  //   },
+  //   sumNum (state) {
+  //     return state.counter.num + state.counter.asyncNum
+  //   }
+  // })
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的',
+      navigationBarBackgroundColor: 'white',
+      navigationBarTextStyle: 'black',
+      backgroundColor: 'white',
+      enablePullDownRefresh: false,
+      backgroundTextStyle: 'light',
+      disableScroll: true
+    }
+    components = {
+      'zan-cell': ZanCell,
+      'zan-panel': ZanPanel,
+      'zan-icon': ZanIcon,
+      'zan-btn': ZanBtn
+    }
+
+    data = {
+      mynum: 20,
+      userInfo: {
+        nickName: '加载中...'
+      },
+      normalTitle: '原始标题',
+      setTimeoutTitle: '标题三秒后会被修改',
+      count: 0,
+      netrst: '',
+      groupList: [
+        {
+          id: 1,
+          name: '点击改变',
+          list: [
+            {
+              childid: '1.1',
+              childname: '子项，点我改变'
+            }, {
+              childid: '1.2',
+              childname: '子项，点我改变'
+            }, {
+              childid: '1.3',
+              childname: '子项，点我改变'
+            }
+          ]
+        },
+        {
+          id: 2,
+          name: '点击改变',
+          list: [
+            {
+              childid: '2.1',
+              childname: '子项，点我改变'
+            }, {
+              childid: '2.2',
+              childname: '子项，点我改变'
+            }, {
+              childid: '2.3',
+              childname: '子项，点我改变'
+            }
+          ]
+        },
+        {
+          id: 3,
+          name: '点击改变',
+          list: [
+            {
+              childid: '3.1',
+              childname: '子项，点我改变'
+            }
+          ]
+        }
+      ],
+      cells: [
+        {
+          title: '我的证件',
+          isIcon: true,
+          isLink: true,
+          url: './cert'
+        },
+        {
+          title: '我的订单',
+          isIcon: true,
+          isLink: true,
+          url: '../order/list'
+        },
+        {
+          title: '修改手机',
+          isIcon: true,
+          isLink: true,
+          url: './phone'
+        }
+      ]
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      plus () {
+        this.mynum++
+      },
+
+      // toast () {
+      //   let promise = this.$invoke('toast', 'show', {
+      //     title: '自定义标题',
+      //     img: 'https://raw.githubusercontent.com/kiinlam/wetoast/master/images/star.png'
+      //   })
+      //
+      //   promise.then((d) => {
+      //     console.log('toast done')
+      //   })
+      // },
+      // tap () {
+      //   console.log('do noting from ' + this.$name)
+      // },
+      // communicate () {
+      //   console.log(this.$name + ' tap')
+      //
+      //   this.$invoke('counter2', 'minus', 45, 6)
+      //   this.$invoke('counter1', 'plus', 45, 6)
+      //
+      //   this.$broadcast('index-broadcast', 1, 3, 4)
+      // },
+      request () {
+        let self = this
+        let i = 10
+        let map = ['MA==', 'MQo=', 'Mg==', 'Mw==', 'NA==', 'NQ==', 'Ng==', 'Nw==', 'OA==', 'OQ==']
+        while (i--) {
+          wepy.request({
+            url: 'https://www.madcoder.cn/tests/sleep.php?time=1&t=css&c=' + map[i] + '&i=' + i,
+            success: function (d) {
+              self.netrst += d.data + '.'
+              self.$apply()
+            }
+          })
+        }
+      }
+      // counterEmit (...args) {
+      //   let $event = args[args.length - 1]
+      //   console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      // }
+    }
+
+    events = {
+      // 'index-emit': (...args) => {
+      //   let $event = args[args.length - 1]
+      //   console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      // }
+    }
+
+    logout () {
+      wx.redirectTo({
+        url: '/pages/login'
+      })
+    }
+
+    onLoad() {
+    }
+  }
+</script>

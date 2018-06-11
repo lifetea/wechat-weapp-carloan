@@ -1,0 +1,527 @@
+<style lang="less">
+  page{
+    background: #efefef;
+    height: 100%;
+  }
+  .main{
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: 100rpx;
+  }
+  .tabs-wrap {
+    width: 100%;
+    height: 100rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border-bottom: 1px solid #f4f4f6;
+    border-top: 1px solid #f4f4f6;
+  }
+
+  .tabs-wrap .tab-text{
+  }
+
+  .tabs-wrap .tab-line{
+    width: 1rem;
+    margin: -10rpx auto;
+    height: 6rpx;
+    background: #ff4515;
+    overflow: hidden;
+    border-radius-topright: 3rpx;
+  }
+
+  .tabs-wrap .tabs-item{
+    width: 50%;
+    text-align: center;
+    line-height:80rpx;
+  }
+  .tabs-wrap .tabs-item.last{
+    border-left: 1rpx solid #efefef;
+  }
+
+  .banner{
+    background: #ff4614;
+  }
+  .banner image{
+    width: 100%;
+  }
+
+  .box{
+    margin: 0 auto;
+    /*padding: 0 10rpx;*/
+    border-radius: 10rpx;
+    background: white;
+    /*min-height: 200rpx;*/
+  }
+
+  .intro-wrap{
+    display: flex;
+    flex-direction: row;
+    min-height: 100rpx;
+    padding: 20rpx 0;
+  }
+  .intro-wrap .intro-item{
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .intro-wrap .intro-t1{
+    font-size: 12px;
+  }
+  .intro-wrap .intro-t2{
+    font-size: 12px;
+    color: #cccccc;
+  }
+  .apply-wrap{
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .apply-title{
+    line-height: 1.6;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    padding: 1rem 0;
+  }
+
+  .label-wrap{
+    width: 80rpx;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+  }
+
+  .apply-label{
+    margin: .5rem auto;
+    width: 40rpx;
+  }
+  .apply-label image{
+    width: 100%;
+  }
+
+  .apply-content{
+    font-size: 14px;
+    height: 100rpx;
+    line-height: 100rpx;
+  }
+
+  .apply-content::-webkit-input-placeholder{
+    color: #ccc;
+  }
+
+  .btn-wrap{
+    margin-top: 1.4rem;
+  }
+
+  .btn-wrap button{
+    background: #ff4614;
+    color: white;
+    height: 100rpx;
+    width: 90%;
+    border-radius: 50rpx;
+    font-size: 14px;
+    line-height: 100rpx;
+    font-weight: bold;
+  }
+
+  .list-wrap{
+    margin-bottom: 2rem;
+  }
+
+  .list-wrap .list-title{
+    width: 90%;
+    margin: 0 auto;
+    font-family: "PingFang SC";
+    font-weight: bold;
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 16px;
+    position: relative;
+  }
+  .list-wrap .item-line{
+    padding-bottom: .4rem;
+    background: #efefef;
+  }
+
+  .list-item {
+    padding-top: 1rem;
+  }
+
+  .list-item .img-wrap{
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    height: 400rpx;
+    overflow: hidden;
+  }
+
+  .img-wrap .img{
+    width: 100%;
+  }
+
+  .item-info{
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .item-info .item-name{
+    font-weight: bold;
+    font-family: "PingFang SC";
+    font-size: 14px;
+  }
+  .item-info .first-pay{
+    font-family: "PingFang SC";
+    color: #ff4614;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .item-info .month-pay{
+    font-family: "PingFang SC";
+    font-size: 13px;
+    color: #969696;
+    padding-left: .4rem;
+  }
+
+  .item-info .car-desc{
+    display: flex;
+    flex-direction: row;
+  }
+  .car-desc .car-color{
+    color: #646464;
+    font-size: 12px;
+    width: 50%;
+  }
+  .car-desc .car-price{
+    width: 50%;
+    text-align: right;
+    color: #cccccc;
+    font-size: 12px;
+    padding-bottom: .4rem;
+  }
+
+
+  .blank-wrap{
+    width: 256rpx;
+    height: 260rpx;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    color: #C8C8C8;
+    font-size: 14px;
+    text-align: center;
+  }
+  .blank-wrap .img{
+    width: 100%;
+  }
+
+
+  .pay-info{
+    display: flex;
+    flex-direction: row;
+    border-top: 1rpx solid #efefef;
+  }
+  .pay-info .pay-item{
+    width: 50%;
+    font-size: 24rpx;
+    text-align: center;
+    height: 100rpx;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  .pay-info .pay-item.last{
+    border-left: 1rpx solid #efefef;
+  }
+
+  .pay-info .pay-item.pay-now{
+    background: #FF4614;
+    color: white;
+  }
+
+  .pay-info .pay-item-text{
+    line-height: 32rpx;
+    margin-left: .4rem;
+    color: #646464;
+  }
+  .pay-info .pay-item-icon{
+    width: 32rpx;
+    height: 32rpx;
+  }
+
+  .pay-item-icon .img{
+    width: 100%;
+  }
+
+</style>
+<template>
+  <view class="main">
+    <view class="tabs-wrap">
+      <view class="tabs-item" @tap="hasPayHandler">
+        <view class="tab-text">已支付</view>
+        <view class="{{currentTab == 0 ? 'tab-line' : ''}}"></view>
+      </view>
+      <view class="tabs-item last"
+             bindtap="unpayHandler">
+        <view class="tab-text">未支付</view>
+        <view class="{{currentTab == 1 ? 'tab-line' : ''}}"></view>
+      </view>
+    </view>
+    <!--车型列表-->
+    <view class="list-wrap box">
+      <repeat for="{{list}}" key="id" index="id" item="item">
+        <view class="list-item">
+          <view class="img-wrap">
+            <image class="img" src="../{{item.image}}" mode="widthFix"/>
+          </view>
+          <view class="item-info">
+            <view>
+              <text class="item-name">{{item.name}}</text>
+            </view>
+            <view class="car-desc">
+              <view class="car-color">{{item.desc}}</view>
+              <view class="car-price">官方指导价{{item.price/10000}}万</view>
+            </view>
+          </view>
+          <view class="pay-info">
+            <view wx:if="{{item.isPay == 0}}" @tap="payHandler({{item}},{{id}})" class="pay-item pay-now">立即支付</view>
+            <view wx:else class="pay-item">已支付</view>
+            <view @tap="showCodeHandler({{item}})" class="pay-item last">
+              <view class="pay-item-icon">
+                <image class="img" src="../../images/qrcode-icon@2x.png" mode="widthFix"/>
+              </view>
+              <view class="pay-item-text">二维码</view>
+            </view>
+          </view>
+        </view>
+        <view class="item-line"></view>
+      </repeat>
+      <view hidden="{{ list.length > 0 ? true : false }}" class="blank-wrap">
+        <image class="img" src="../../images/blank-icon@2x.png" mode="widthFix"/>
+        <text>当前没有订单</text>
+      </view>
+    </view>
+
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import mainwxs from '../../wxs/main.wxs'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '订单列表',
+      backgroundColor: '#efefef'
+    }
+    components = {
+    }
+
+    wxs = {
+      m: mainwxs
+    }
+
+    data = {
+      mobile: null,
+      currentTab: 0,
+      // 车型列表
+      carList: wepy.carList,
+      list: []
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      hasPayHandler: function (event) {
+        const that = this
+        that.currentTab = 0
+        that.getList(1)
+        // console.log(event)
+      },
+      unpayHandler: function (event) {
+        const that = this
+        // console.log(event)
+        that.currentTab = 1
+        that.getList(0)
+      },
+      orderHandler (e) {
+        const that = this
+        console.log(that.mobile)
+        wepy.request({
+          url: 'api/user/verify/send',
+          method: 'POST',
+          data: {
+            mobile: that.mobile
+          },
+          success: function (res) {
+            const code = res.data.code
+            const message = res.data.message
+            if (code === 200) {
+
+            } else {
+              wx.showToast({
+                title: message,
+                icon: 'loading',
+                duration: 1000
+              })
+            }
+          }
+        })
+      },
+      showCodeHandler(item) {
+        const that = this
+        that.goPayment(item)
+      },
+      payHandler (item,id) {
+        const that = this
+        console.log(item)
+        wepy.request({
+          url: 'trade/placeAnOrder',
+          method: 'POST',
+          data: {
+            body: '意向金',
+            outTradeNo: item.id,
+            totalFee: 9900
+          },
+          success: function (res) {
+            const resBody = res.data
+            const option = resBody.data
+            const code = resBody.code
+            if (code === 200) {
+              that.requestPayment(option,id)
+            }
+          }
+        })
+      }
+    }
+
+    events = {
+      // 'index-emit': (...args) => {
+      //   let $event = args[args.length - 1]
+      //   console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      // }
+    }
+
+    requestPayment(option,id){
+      const that = this
+      wx.requestPayment(
+        {
+          timeStamp: option.timeStamp,
+          nonceStr: option.nonceStr,
+          package: option.package1,
+          signType: option.signType,
+          paySign: option.paySign,
+          success:function(res){
+            that.list[id].isPay = 1
+            that.$apply()
+          },
+          fail:function(res){
+
+          },
+          complete:function(res){
+
+          }
+        })
+    }
+
+    getList(isPay) {
+      const that = this
+      wepy.request({
+        url: 'userBusiness/list',
+        method: 'POST',
+        data: {
+          isPay: isPay
+        },
+        success: function(res) {
+          const resBody = res.data
+          const code = resBody.code
+          const message = resBody.message
+          const data = resBody.data
+          if (code === 200) {
+            const arr = []
+            data.list.forEach(t => {
+              const carId = t.carId
+              if (carId != null){
+                const ob = that.carList.find(e => {
+                  return e.id === parseInt(carId)
+                })
+                Object.assign(t,{
+                  carId: ob.id,
+                  image: ob.image,
+                  name: ob.name,
+                  firstPay: ob.firstPay,
+                  monthPay: ob.monthPay,
+                  price: ob.price,
+                  desc: ob.desc
+                })
+                arr.push(t)
+              }
+
+            })
+            that.list = arr
+            that.$apply()
+
+          } else {
+            wx.showToast({
+              title: message,
+              icon: 'loading',
+              duration: 1000
+            })
+          }
+        }
+      })
+    }
+    // 跳转到支付
+    goPayment (item) {
+      const that = this
+      item['orderId'] = item.id
+      wx.navigateTo({
+        url: './payment?item=' + JSON.stringify(item),
+        success: function(res) {
+          console.log('success')
+          // success
+        },
+        fail: function() {
+          console.log('fail')
+          // fail
+        },
+        complete: function() {
+          console.log('complete')
+          // complete
+        }}
+      )
+    }
+
+    onUnload() {
+      wx.switchTab({
+        url: '/pages/person/index'
+      })
+    }
+
+    onLoad() {
+      const that = this
+      that.getList(1)
+    }
+  }
+</script>
